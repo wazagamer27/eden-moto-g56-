@@ -1,4 +1,4 @@
-name: Compilar Eden PowerVR
+name: Compilar Eden PowerVR Definitivo
 on:
   push:
     branches: [ master, main ]
@@ -11,24 +11,27 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+        fetch-depth: 0
 
-    - name: Configurar Java 17
+    - name: Configurar Java 11 (Compatible)
       uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
-        java-version: '17'
+        distribution: 'zulu'
+        java-version: '11'
 
-    - name: Instalar NDK de Android
+    - name: Instalar Herramientas de Android
       uses: android-actions/setup-android@v3
 
-    - name: Dar permisos y Compilar APK
+    - name: Corregir Permisos y Compilar Manualmente
       run: |
         cd src/android
         chmod +x gradlew
-        ./gradlew assembleRelease --no-daemon
+        ./gradlew assembleRelease --no-daemon --stacktrace
 
-    - name: Subir APK terminada
+    - name: Guardar y Subir APK
       uses: actions/upload-artifact@v4
       with:
-        name: Eden-MotoG56-PowerVRFix
-        path: src/android/app/build/outputs/apk/release/*.apk
+        name: Eden-MotoG56-Fix
+        path: |
+          src/android/app/build/outputs/apk/release/*.apk
+          src/android/App/build/outputs/apk/release/*.apk
