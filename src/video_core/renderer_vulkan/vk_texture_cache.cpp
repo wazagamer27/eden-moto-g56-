@@ -1782,19 +1782,7 @@ Image::Image(TextureCacheRuntime& runtime_, const ImageInfo& info_, GPUVAddr gpu
                                runtime->ViewFormats(info.format))),
       aspect_mask(ImageAspectMask(info.format)) {
     if (IsPixelFormatASTC(info.format) && !runtime->device.IsOptimalAstcSupported()) {
-        switch (Settings::values.accelerate_astc.GetValue()) {
-        case Settings::AstcDecodeMode::Gpu:
-            if (WillUseAcceleratedAstcDecode(runtime->device, info)) {
-                flags |= VideoCommon::ImageFlagBits::AcceleratedUpload;
-            }
-            break;
-        case Settings::AstcDecodeMode::CpuAsynchronous:
-            flags |= VideoCommon::ImageFlagBits::AsynchronousDecode;
-            break;
-        default:
-            break;
-        }
-        flags |= VideoCommon::ImageFlagBits::Converted;
+         flags |= VideoCommon::ImageFlagBits::Converted;
         flags |= VideoCommon::ImageFlagBits::CostlyLoad;
     }
     if (IsPixelFormatBCn(info.format) && !runtime->device.IsOptimalBcnSupported()) {
